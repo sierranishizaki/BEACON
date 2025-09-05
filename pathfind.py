@@ -39,8 +39,8 @@ with open("allProteins.txt", 'r') as allPFile:
             (curProt, curSteps) = popPQ(pq)
             # if this protein doesn't have any interactions, skip it
             #   (this should only happen for proteins at step 0)
-            if not os.path.exists("cache/" + curProt):
-                continue
+            #if not os.path.exists("cache/" + curProt):
+            #    continue
             # if we've already seen this protein, skip it
             #   (the distance part shouldn't be necessary due to priority queue,
             #    but it is cheap to check just in case) TODO: remove?

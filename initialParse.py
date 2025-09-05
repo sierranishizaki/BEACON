@@ -1,5 +1,9 @@
 import gzip
 import os
+import time
+from pathlib import Path
+
+tic = time.time()
 
 allProt = set()
 
@@ -15,7 +19,7 @@ with gzip.open("9606.protein.links.v12.0.txt.gz", 'rt') as f:
         if counter == 1:
             continue
         if counter%modVal == 0:
-            print(counter//modVal, "\t", len(allProt))
+            print(counter//modVal, "\t", len(allProt), "\t", time.time()-tic)
         [prot1, prot2, score] = line.split()
         allProt.add(prot1)
         allProt.add(prot2)
@@ -26,4 +30,6 @@ with gzip.open("9606.protein.links.v12.0.txt.gz", 'rt') as f:
 with open("allProteins.txt", "w") as f:
     for p in sorted(allProt):
         print(p, file=f)
+        Path("cache/"+p).touch()
 
+print(time.time()-tic)

@@ -50,7 +50,10 @@ with open("allProteins.txt", 'r') as allPFile:
 
             # if we've already computed distances from this protein,
             #   use that work
-            f = open("cache/" + curProt, 'r')
+            if curProt < source:
+                f = open("cache2/" + curProt, 'r')
+            else:
+                f = open("cache/" + curProt, 'r')
 
             for line in f:
                 [nextProt, nextStep] = line.split()

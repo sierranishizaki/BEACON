@@ -3,7 +3,6 @@ import time
 
 allProt = []
 
-
 # pq is a priority queue organized to be a list of lists
 #   the priority is an integer (number of steps from source)
 #   and determines which internal list the protein is stored in
@@ -31,6 +30,16 @@ if len(os.listdir("cache2/")) != 0:
         
 tic = time.time()
 counter = 0
+
+bigCache = {}
+with open("allProteins.txt", 'r') as allPFile:
+    for p in allPFile:
+        p = p[:-1]
+        with open("cache/" + p, 'r') as f:
+            bigCache[p] = []
+            for d in f:
+                bigCache[p].append(d.split()[0])
+
 with open("allProteins.txt", 'r') as allPFile:
     for source in allPFile:
         counter += 1
@@ -57,23 +66,15 @@ with open("allProteins.txt", 'r') as allPFile:
             #    print("Prevented revisiting", curProt)
             #    continue
 
-            # if we've already computed distances from this protein,
-            #   use that work
-            if curProt < source:
-                f = open("cache2/" + curProt, 'r')
-            else:
-                f = open("cache/" + curProt, 'r')
-
-            for line in f:
-                [nextProt, nextStep] = line.split()
-                nextStep = int(nextStep)            
+            for nextProt in bigCache[curProt]:
+                nextStep = 1
                 # if we already know a faster way to get to this protein, skip it
                 #   before the and prevents backtracking
                 #   TODO: verify if the distance stuff adds value
                 if nextProt in distances:
                     continue
-                addPQ(pq, nextProt, curSteps + nextStep)
-                distances[nextProt] = curSteps + nextStep
+                addPQ(pq, nextProt, curSteps + 1)
+                distances[nextProt] = curSteps + 1
             f.close()
         with open("cache2/" + source, "w") as f:
             # sort the dictionary by value, then print

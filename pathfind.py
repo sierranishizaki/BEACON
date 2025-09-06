@@ -24,6 +24,11 @@ def popPQ(pq):
         if len(pq[i]) > 0:
             return (pq[i].pop(), i)
 
+if not os.path.exists("cache2"):
+    os.mkdir("cache2")
+if len(os.listdir("cache2/")) != 0:
+    print("cache2 is not empty!!!!")
+        
 tic = time.time()
 counter = 0
 with open("allProteins.txt", 'r') as allPFile:
@@ -35,7 +40,11 @@ with open("allProteins.txt", 'r') as allPFile:
 
         distances = {source: 0}
         pq = [[source]]
+        innerCounter = 0
         while sizePQ(pq) > 0:
+            innerCounter += 1
+            #if innerCounter % 1000 == 0:
+            #    print(source, innerCounter, sizePQ(pq), time.time()-tic, sep="\t")
             (curProt, curSteps) = popPQ(pq)
             # if this protein doesn't have any interactions, skip it
             #   (this should only happen for proteins at step 0)
@@ -61,7 +70,7 @@ with open("allProteins.txt", 'r') as allPFile:
                 # if we already know a faster way to get to this protein, skip it
                 #   before the and prevents backtracking
                 #   TODO: verify if the distance stuff adds value
-                if nextProt in distances and distances[nextProt] < curSteps + nextStep:
+                if nextProt in distances:
                     continue
                 addPQ(pq, nextProt, curSteps + nextStep)
                 distances[nextProt] = curSteps + nextStep

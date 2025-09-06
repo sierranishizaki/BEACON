@@ -26,6 +26,8 @@ with gzip.open("9606.protein.links.v12.0.txt.gz", 'rt') as f:
         if prot1 < prot2 and int(score) >= 900:
             with open("cache/"+prot1, "a") as w:
                 w.write(prot2 + "\t1\n")
+            with open("cache/"+prot2, "a") as w:
+                w.write(prot1 + "\t1\n")
         
 with open("allProteins.txt", "w") as f:
     for p in sorted(allProt):

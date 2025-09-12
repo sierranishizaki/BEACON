@@ -5,32 +5,40 @@ import os
 import time
 from pathlib import Path
 
+# these define the default values
 filein = ''
-threshold = 900
-cache_dir = 'cache'
+threshold = 400
 output_dir = 'output'
 silent = False
 
 tic = time.time()
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "hsi:t:c:o:",
-                               ["help", "silent", "input=", "threshold=", "cache=", "output="])
+    opts, args = getopt.getopt(sys.argv[1:], "hsi:t:o:",
+                               ["help", "silent", "input=", "threshold=", "output="])
 except getopt.GetoptError:
-    print('python initialParse.py -i INPUTFILE [-s] [-t INTEGER0-1000] [-c CACHEDIR] [-o OUTPUTDIR]')
+    print('python initialParse.py -i INPUTFILE [-s] [-t NUM0-1] [-o OUTPUTDIR]')
     sys.exit(2)
 
 for opt, arg in opts:
     if opt in ('-h', '--help'):
-        print("python initialParse.py -i INPUTFILE [-s/--silent] [-t INTEGER0-1000] [-o OUTPUTDIR]\n" +
-              "INPUTFILE can be .txt or .txt.gz, threshold defaults to 900, output defaults to OUTPUT\n")
+        print("python initialParse.py -i INPUTFILE [-s/--silent] [-t NUM0-1] [-o OUTPUTDIR]\n" +
+              "INPUTFILE can be .txt or .txt.gz, output defaults to OUTPUT\n" +
+              "threshold can be 0-1 (3 significant figures) or an integer 0-1000, defaults to 0.4")
         sys.exit()
     elif opt in ("-i", "--input"):
         filein = arg
     elif opt in ("-s", "--silent"):
         silent = True
     elif opt in ("-t", "--threshold"):
-        threshold = int(arg)
+        # threshold could either be in decimal form (how the papers talk about it)
+        if float(arg) < 1:
+            threshold = int(1000*float(arg))
+        # or integer form (how the database encodes it, therefore how this code handles it)
+        else:
+            threshold = int(arg)
+        if threshold > 1000:
+            print("Threshold is too high to be reasonable!")
     elif opt in ("-o", "--output"):
         output_dir = arg
 
@@ -56,7 +64,7 @@ else:
     sys.exit()
 
 if not silent:
-    print("Reading protein interactions from", filein, ", columns are:\nRows processed (*" + str(modVal) + "), Unique Proteins, Time elapsed")
+    print("Reading protein interactions from", filein, "with threshold", threshold/1000, "columns are:\nRows processed (*" + str(modVal) + "), Unique Proteins, Time elapsed")
 
 # this reads in a file in the format of:
 # GENE1 GENE2 Integer(0-1000)
@@ -80,7 +88,7 @@ for line in f:
         bigCache[prot2].append(prot1)
 
 if not silent:
-    print("Done processing input and writing to", cache_dir, "in", time.time()-tic)
+    print("Done processing input and building cache, took", time.time()-tic)
 
 # this PQ is a bit too fancy for the simple pathfinding algorithm that
 #   ended up being used for this, it could have just been a flat queue

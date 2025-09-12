@@ -17,13 +17,13 @@ try:
     opts, args = getopt.getopt(sys.argv[1:], "hsi:t:o:",
                                ["help", "silent", "input=", "threshold=", "output="])
 except getopt.GetoptError:
-    print('python initialParse.py -i INPUTFILE [-s] [-t NUM0-1] [-o OUTPUTDIR]')
+    print('python beaconPathfind.py -i INPUTFILE [-s] [-t NUM0-1] [-o OUTPUTDIR]')
     sys.exit(2)
 
 for opt, arg in opts:
     if opt in ('-h', '--help'):
-        print("python initialParse.py -i INPUTFILE [-s/--silent] [-t NUM0-1] [-o OUTPUTDIR]\n" +
-              "INPUTFILE can be .txt or .txt.gz, output defaults to OUTPUT\n" +
+        print("python beaconPathfind.py -i INPUTFILE [-s/--silent] [-t NUM0-1] [-o OUTPUTDIR]\n" +
+              "INPUTFILE can be .txt or .txt.gz, output defaults to 'output'\n" +
               "threshold can be 0-1 (3 significant figures) or an integer 0-1000, defaults to 0.4")
         sys.exit()
     elif opt in ("-i", "--input"):
@@ -42,10 +42,14 @@ for opt, arg in opts:
     elif opt in ("-o", "--output"):
         output_dir = arg
 
+if not silent:
+    print("Running with parameters:\ninput: '" + filein + "'\nthreshold: '" +
+          str(threshold/1000) + "'\noutput: '" + output_dir + "'")
+        
 if not os.path.exists(filein):
     print("Input file '" + filein + "' was not found")
     sys.exit()
-        
+
 counter = 0
 modVal = 1000000
 
@@ -116,7 +120,7 @@ def popPQ(pq):
 counter = 0
 
 if not silent:
-    print("Building networks of proteins, lines are:\n" +
+    print("Building networks of proteins, writing to '" + output_dir + "/', columns are:\n" +
           "# proteins processed (of "+str(len(bigCache))+") Time Elapsed from start of whole script")
 
 # for each protein, build a network from it

@@ -5,6 +5,23 @@ import os
 import time
 from pathlib import Path
 
+# This script takes in protein interaction scores and constructs networks of proteins
+# The input file is intended to be downloaded from https://string-db.org/cgi/download
+#   If another source is used, it must match the format of each line being:
+#   Gene1ID Gene2ID Score
+#   Score is given as an integer from 0-1000, which corresponds to the threshold argument
+#   This script will ignore lines where Gene1ID > Gene2ID (i.e. Gene1ID would come after
+#   Gene2ID in a dictionary), as it should get the same score information from the line where
+#   Gene1ID < Gene2ID.
+
+# The output directory will have a file for each unique GeneID found in the input file
+# Each row of the output file will be in the format of:
+#   GeneID Steps
+# Where Steps is an integer representing how many protein interactions need to be followed
+#   to connect the two relevant proteins. The first line is guarenteed to be "Filename 0"
+#   (each protein is 0 steps away from itself)
+# Any proteins not listed in a file don't connect to that protein
+
 # these define the default values
 filein = ''
 threshold = 400

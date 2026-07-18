@@ -1,0 +1,3 @@
+Proteins of interest BEACON score: 2.66666666666667
+Random proteins BEACON score: 3.14504274786261
+Monte Carlo Approximation P-value: 0.212589370531473

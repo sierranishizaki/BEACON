@@ -9,8 +9,10 @@ Run guide:
 2. Next, run beaconPathfind.py to generate a cache of the shortest number of functional links between each pair of proteins in the database. Ex: 
 ```python beaconPathfind.py --input 9606.protein.links.v12.0.txt.gz --threshold 400 --output cache```                                                                
 3. Generate a BEACON score and compare it to random protein lists using run_BEACON.pl. Ex:                                                                     
-```perl run_BEACON.pl --input proteins_of_interest.txt --cache cache_directory --output output_directory\'94```
+```perl run_BEACON.pl --input proteins_of_interest.txt --cache cache_directory --output output_directory ```
 
+3.2. Or use run_BEACON_candidates.pl to see how BEACON scores change between candidate proteins when compared to a list of proteins known to be associated with a disease or trait Ex:                                                                     
+```perl run_BEACON_candidates.pl --input proteins_of_interest.txt --known known_proteins.txt --cache cache_directory --output output_directory ```
 
 ## Usage
 

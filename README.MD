@@ -5,7 +5,7 @@ BEACON is a novel method to query the relatedness of a candidate gene network by
 ## Run Guide 
 Run guide:
 1. First, please download all protein links from STRING. Ex:
-```wget \\"https://stringdb-downloads.org/download/protein.links.v12.0/9606.protein.links.v12.0.txt.gz\\" ```                                                          
+```wget "https://stringdb-downloads.org/download/protein.links.v12.0/9606.protein.links.v12.0.txt.gz" ```                                                          
 2. Next, run beaconPathfind.py to generate a cache of the shortest number of functional links between each pair of proteins in the database. Ex: 
 ```python beaconPathfind.py --input 9606.protein.links.v12.0.txt.gz --threshold 400 --output cache```                                                                
 3. Generate a BEACON score and compare it to random protein lists using run_BEACON.pl. Ex:                                                                     

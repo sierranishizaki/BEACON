@@ -14,4 +14,4 @@ Run guide:
 
 ## Usage
 
-```USAGE: perl run_BEACON.pl proteins_of_interest.txt cache_directory  ```}
+```USAGE: perl run_BEACON.pl proteins_of_interest.txt cache_directory  ```
